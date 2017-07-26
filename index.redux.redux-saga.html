@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>GenericBoard (v2.saga)</title>
+        <style>
+            .clr-bored { background-color: lightsteelblue !important;} <!-- 0xb0c4de -->
+            .btn-group { display: inline-block; }
+            h3 { margin-top: 10px !important; }
+            .page { background-color: #eeeeee; }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ= sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.js" integrity="sha256-1uk/AXiYWDJQQgWL10P3Vz5qhIsyBxnwo4dwmw4cYHc= sha384-sfaC01sZATdYSJMLJufPgFeCnESWa6C7iwjSsH19HruDma9G54ZYpk9htYV+mYNL sha512-JsUCFeOgTrVLYRKdo9f2AsBasE/24c5Ewg+jsz4jc0k60h3btP6MHCwuBcY18eXurkDlBJ3DsoMBBuWD5mzZXA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.js" integrity="sha256-DgeuoVzoa2SXxU85mfFSVK8FX3l7FxCoBn5uO3v1jYI= sha384-4rEEtbCoRK0ly0ZaxJ3gfBuuMBvPV50gpoOg0bBvpfKLmzY2hqqP8eZX6Kb374D8 sha512-WfvibmBGhr5P8Eg/bcrOPi7qI9k/UQ6ClT9CxFHjzEm5pSyRO6LiIfbahgXnaGNCGsg5/4aqGOt3DA2cwtwHbA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.1/redux.min.js" integrity="sha256-Y8AuGIYFWCOBO5/w1oXzcEErW4JALGUWiG5VWleVWyw= sha384-1qvo8UIQh8p/bN1YGe52MRwQG6KUSl9zZkYlzl1/0lIEsEtjlJwQwpCaxoO9D+9T sha512-qA9SjHT5lvxuTojTF2xYNMLwadv3HiDmLD8VYj9MNxiT8UFbZrTz4lna1bXkCBNc7gkZyeo8HSEDPGIYobja4Q==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/5.0.5/react-redux.min.js" integrity="sha256-ruL3wNUkRPlfW7eq02mT+q8vEe6SS8eHVqr4zUtRuUc= sha384-bKquTDDYjpatshkKDNhd9s020AbcR/35kluCYP/suaU0hZ0q3dHc4TyOJ7xUFsQG sha512-HnuKqBnItAyxqEeIAvHGkT85QWO8MI60JfxnRhTQreAiIZsYVXGXFwNf2UWhk8lC1xamMhknqC8FdHukNwALzg==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js" integrity="sha384-iuw+SkbnEXb6A6JBdgzzWBLglxDedYujIlz1CFE5L+r5NJiBQ0SS/TXfcd6BsiCW" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js" integrity="sha384-FbHUaR69a828hqWjPw4PFllFj1bvveKOTWORGkyosCw720HXy/56+2hSuQDaogMb" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/redux-saga/0.15.4/redux-saga.min.js" integrity="sha384-foCR4kLSZP9IuIJjWDOcIMcpEvEG0y4G7w6136R0nTMylv2Oh2I23kPILm3U5vNh" crossorigin="anonymous"></script>
+        <script type="text/babel">
+
+            // we'd like to:
+            //  1. Like posts ("simple" business logic)
+            //  2. Run a report on the posts ("complex" business logic)
+            //  3. Fetch new posts (async business logic)
+
+            const initialState = {
+                posts: {
+                    1: {text: 'First message', author: 'Matt Wigdahl', likes: 0, comments: [1, 2]},
+                    2: {text: 'Check out my blog...', author: 'Edwin Alton', likes: 0, comments: [3, 4]}
+                },
+                comments: {
+                    1: { text: 'Congratulations!' },
+                    2: { text: 'Welcome aboard!' },
+                    3: { text: 'Great article' },
+                    4: { text: 'Are you sure?' }
+                },
+                metrics: null,
+                me: 'Matt Wigdahl',
+                status: 'Loaded',
+            };
+
+            const postsToAdd = {
+                3: { text: 'A new post', author: 'Phineas Quinn', likes: 1, comments: []}
+            };
+
+            let callCount = 0;
+// api
+            function fetchNewPosts() { 
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => { callCount == 0 ? reject('error') : resolve(postsToAdd); callCount += 1; }, 2000)
+                })
+            }
+
+// redux stuff here...
+// action definitions
+            const actions = {
+                LOAD_POSTS_REQUEST: 'KCDCDemo/postList/LOAD_POSTS_REQUEST',
+                LOAD_POSTS_SUCCESS: 'KCDCDemo/postList/LOAD_POSTS_SUCCESS',
+                LOAD_POSTS_FAILURE: 'KCDCDemo/postList/LOAD_POSTS_FAILURE',
+                POST_METRICS: 'KCDCDemo/postList/POST_METRICS',
+                POST_METRICS_SUCCESS: 'KCDCDemo/postList/POST_METRICS_SUCCESS',
+                LIKE_POST: 'KCDCDemo/post/LIKE_POST'
+            };
+// action creators
+            const creators = {
+                loadPosts: function() { return { type: actions.LOAD_POSTS_REQUEST } },
+                loadPostsSuccess: function(postsToAdd) { return { type: actions.LOAD_POSTS_SUCCESS, payload: postsToAdd } },
+                loadPostsFailure: function() { return { type: actions.LOAD_POSTS_FAILURE } },
+                postMetrics: function() { return { type: actions.POST_METRICS } },
+                postMetricsSuccess: function(metrics) { return { type: actions.POST_METRICS_SUCCESS, payload: metrics } },
+                likePost: function(id) { return { type: actions.LIKE_POST, payload: id }; }
+            };
+// reducers
+            function posts(state = initialState.posts, action) {
+                switch(action.type) {
+                    case actions.LOAD_POSTS_SUCCESS: return { ...state, ...action.payload };
+                    case actions.LIKE_POST: {
+                        return { ...state, [action.payload]: { ...state[action.payload], 
+                            likes: state[action.payload].likes+1 } 
+                        }
+                    }
+                    default: return state;
+                }
+            }
+
+            function metrics(state = initialState.metrics, action) {
+                switch(action.type) {
+                    case actions.POST_METRICS_SUCCESS: return action.payload;
+                    default: return state;
+                }
+            }
+
+            function me(state = initialState.me, action) { return state; }
+            function comments(state = initialState.comments, action) { return state; }
+
+            function status(state = initialState.status, action) { 
+                switch(action.type) {
+                    case actions.LOAD_POSTS_REQUEST: return 'Loading';
+                    case actions.LOAD_POSTS_SUCCESS: return 'Loaded';
+                    case actions.LOAD_POSTS_FAILURE: return 'Error';
+                    default: return state;
+                }
+            }
+// selector
+            function getPosts(state) { return state.posts; }
+// sagas
+            function* loadPostsWatcher() { yield ReduxSaga.takeEvery(actions.LOAD_POSTS_REQUEST, loadPostsWorker); }
+            function* loadPostsWorker(action) { 
+                try {
+                    const postsToAdd = yield ReduxSaga.effects.call(fetchNewPosts);
+                    yield ReduxSaga.effects.put(creators.loadPostsSuccess(postsToAdd));
+                }
+                catch(error) {
+                    yield ReduxSaga.effects.put(creators.loadPostsFailure());
+                }
+                yield ReduxSaga.effects.put(creators.postMetrics());
+            }
+
+            function* postMetricsWatcher() { yield ReduxSaga.takeEvery(actions.POST_METRICS, postMetricsWorker); }
+            function* postMetricsWorker(action) {
+                const postObj = yield ReduxSaga.effects.select(getPosts);
+                const posts = Object.values(postObj);
+                const numComments = posts.reduce((accum, val) => { return accum += val.comments.length }, 0);
+                const numLikes = posts.reduce((accum, val) => { return accum += val.likes }, 0);
+                const metrics = `# of posts: ${posts.length}, # of comments: ${numComments}, # of likes: ${numLikes}`; 
+                
+                yield ReduxSaga.effects.put(creators.postMetricsSuccess(metrics));
+            }
+
+            function* saga() { yield ReduxSaga.effects.all([loadPostsWatcher(), postMetricsWatcher()]) }
+// infrastructure
+            const applyMiddleware = Redux.applyMiddleware;
+            const sagaMiddleware = ReduxSaga.default();
+            const rootReducer = Redux.combineReducers({ posts, metrics, me, status, comments });
+            const store = Redux.createStore(rootReducer, initialState, applyMiddleware(sagaMiddleware));
+            const Provider = ReactRedux.Provider;
+            sagaMiddleware.run(saga);
+// end redux
+
+            const PostText = ({text}) => <h3><small>post: </small><span className="h4">{text}</span></h3>
+            const Author = ({author}) => <h3><small>author: </small>{author}</h3>
+            const Likes = ({likes}) => <h3><small>likes: {likes}</small></h3>
+            const Comment = ({comment}) => <li>{comment}</li>
+
+            const PostDeleteBtn = ({postDelete}) => 
+                <button type="button" className="btn btn-danger" onClick={postDelete}><span className="glyphicon glyphicon-remove" /></button>;
+
+            const CommentAddBtn = ({addComment}) => 
+                <button type="button" className="btn btn-primary" onClick={addComment}><span className="glyphicon glyphicon-comment"/></button>;
+
+            const LikePostBtn = ({likePost, ind}) =>
+                <button type="button" className="btn btn-primary" onClick={() => likePost(ind)}><span className="glyphicon glyphicon-thumbs-up"/></button>;
+
+            const CommentList = ({postComments, comments}) =>
+                <div>
+                    <h3><small>comments:</small></h3>
+                    <ul>{postComments.map((id) => <Comment comment={comments[id].text} key={id} />)}</ul>
+                </div>
+
+            const ActionButtons = ({author, me, ind, postDelete, addComment, likePost}) =>
+                author === me ? <PostDeleteBtn postDelete={postDelete} /> :
+                    <div>
+                        <LikePostBtn likePost={likePost} ind={ind} />
+                        <CommentAddBtn addComment={addComment} />
+                    </div>
+
+            const PostCore = ({post, ind, me, likePost, comments}) => {
+                return (
+                <div className="clr-bored col-xs-12 col-sm-10 col-md-offset-1">
+                    <Author author={post.author} />
+                    <Likes likes={post.likes} />
+                    <PostText text={post.text} />
+                    <CommentList author={post.author} postComments={post.comments} comments={comments} id={ind} />
+                    <ActionButtons author={post.author} me={me} ind={ind} postDelete={null} 
+                        addComment={null} likePost={likePost} />
+                </div>)
+            }
+
+            PostCore.mapStateToProps = ({me, comments}) => { return { me, comments }; }
+            const Post = ReactRedux.connect(PostCore.mapStateToProps, { likePost: creators.likePost })(PostCore);
+
+            const LoadPostBtn = ({loadPosts}) => <input type="button" value="Load New Posts" className="btn btn-primary" onClick={loadPosts} />
+            const PostMetricsBtn = ({postMetrics}) => <input type="button" value="Update Post Metrics" className="btn btn-primary" onClick={postMetrics} />
+            const PostMetrics = ({displayString}) => displayString ? <div><span>{displayString}</span></div> : null;
+
+            const PostListCore = ({posts, metrics, loadPosts, postMetrics}) =>
+                <div className="container">
+                    <div className="row">
+                        {posts && Object.entries(posts).map(([ind, post]) => <Post post={post} key={ind} ind={ind} />)}
+                    </div>
+                    <p/>
+                    <div className="row btn-group">
+                        <LoadPostBtn loadPosts={loadPosts} />
+                        <PostMetricsBtn postMetrics={postMetrics} />
+                    </div>
+                    <PostMetrics displayString={metrics} />
+                </div>
+
+            PostListCore.mapStateToProps = (state) => { return { posts: state.posts, metrics: state.metrics } }
+            PostListCore.mapDispatchToProps = (dispatch) => {
+                return {
+                    postMetrics: () => dispatch(creators.postMetrics()),
+                    loadPosts: () => dispatch(creators.loadPosts())
+                }
+            }
+            const PostList = ReactRedux.connect(PostListCore.mapStateToProps, PostListCore.mapDispatchToProps)(PostListCore);
+
+            const PageHeader = () => 
+                <div className="jumbotron clr-bored">
+                    <h1><strong className="text-primary">GenericBoard</strong> <small>Version 2.saga (React/Redux, redux-saga)</small></h1>
+                </div>
+
+            const UserInfoCore = ({me, status}) => <h3><small>user: </small>{me} <small>status: {status}</small></h3>
+            const UserInfo = ReactRedux.connect(state => { return { me: state.me, status: state.status } }, null)(UserInfoCore);
+
+            const Page = () => 
+                <div className="page">
+                    <PageHeader />
+                    <UserInfo />
+                    <PostList />
+                </div>
+            
+            ReactDOM.render(
+                <Provider store={store}>
+                    <Page />
+                </Provider>,
+                document.getElementById('app')
+            );
+        </script>
+    </body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>GenericBoard (v0.0)</title>
+        <style>
+            .clr-bored { background-color: lightsteelblue !important;} <!-- 0xb0c4de -->
+            .btn-group { display: inline-block; }
+            h3 { margin-top: 10px !important; }
+            .page { background-color: #eeeeee; }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ= sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.js" integrity="sha256-1uk/AXiYWDJQQgWL10P3Vz5qhIsyBxnwo4dwmw4cYHc= sha384-sfaC01sZATdYSJMLJufPgFeCnESWa6C7iwjSsH19HruDma9G54ZYpk9htYV+mYNL sha512-JsUCFeOgTrVLYRKdo9f2AsBasE/24c5Ewg+jsz4jc0k60h3btP6MHCwuBcY18eXurkDlBJ3DsoMBBuWD5mzZXA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.js" integrity="sha256-DgeuoVzoa2SXxU85mfFSVK8FX3l7FxCoBn5uO3v1jYI= sha384-4rEEtbCoRK0ly0ZaxJ3gfBuuMBvPV50gpoOg0bBvpfKLmzY2hqqP8eZX6Kb374D8 sha512-WfvibmBGhr5P8Eg/bcrOPi7qI9k/UQ6ClT9CxFHjzEm5pSyRO6LiIfbahgXnaGNCGsg5/4aqGOt3DA2cwtwHbA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js" integrity="sha384-iuw+SkbnEXb6A6JBdgzzWBLglxDedYujIlz1CFE5L+r5NJiBQ0SS/TXfcd6BsiCW" crossorigin="anonymous"></script>
+        <script type="text/babel">
+
+            // we'd like to:
+            //  1. Like posts ("simple" business logic)
+            //  2. Run a report on the posts ("complex" business logic)
+            //  3. Fetch new posts (async business logic)
+
+            const initialState = {
+                posts: {
+                    1: {text: 'First message', author: 'Matt Wigdahl', likes: 0, comments: [1, 2]},
+                    2: {text: 'Check out my blog...', author: 'Edwin Alton', likes: 0, comments: [3, 4]}
+                },
+                comments: {
+                    1: { text: 'Congratulations!' },
+                    2: { text: 'Welcome aboard!' },
+                    3: { text: 'Great article' },
+                    4: { text: 'Are you sure?' }
+                }
+            };
+
+            const me = 'Matt Wigdahl';
+
+            const PostText = ({text}) => <h3><small>post: </small><span className="h4">{text}</span></h3>
+            const Author = ({author}) => <h3><small>author: </small>{author}</h3>
+            const Likes = ({likes}) => <h3><small>likes: {likes}</small></h3>
+            const Comment = ({comment}) => <li>{comment}</li>
+
+            const PostDeleteBtn = () => 
+                <button type="button" className="btn btn-danger"><span className="glyphicon glyphicon-remove" /></button>;
+
+            const CommentAddBtn = () => 
+                <button type="button" className="btn btn-primary"><span className="glyphicon glyphicon-comment"/></button>;
+
+            const LikePostBtn = () =>
+                <button type="button" className="btn btn-primary"><span className="glyphicon glyphicon-thumbs-up"/></button>;
+
+            const CommentList = ({postComments, comments}) => 
+                <div>
+                    <h3><small>comments:</small></h3>
+                    <ul>{postComments.map((id) => <Comment comment={comments[id].text} key={id} />)}</ul>
+                </div>
+
+            const ActionButtons = ({author}) =>
+                author === me ? <PostDeleteBtn /> :
+                    <div>
+                        <LikePostBtn />
+                        <CommentAddBtn />
+                    </div>
+
+            const Post = ({post}) =>
+                <div className="clr-bored col-xs-12 col-sm-10 col-md-offset-1">
+                    <Author author={post.author} />
+                    <Likes likes={post.likes} />
+                    <PostText text={post.text} />
+                    <CommentList author={post.author} postComments={post.comments} comments={initialState.comments} />
+                    <ActionButtons author={post.author} />
+                </div>
+
+            const LoadPostBtn = () => <input type="button" value="Load New Posts" className="btn btn-primary" />
+            const PostMetricsBtn = () => <input type="button" value="Update Post Metrics" className="btn btn-primary" />
+            const PostMetrics = ({displayString}) => displayString ? <div><span>{displayString}</span></div> : null;
+
+            const PostList = ({posts}) => 
+                <div className="container">
+                    <div className="row">
+                        {Object.entries(posts).map(([ind, post]) => <Post post={post} key={ind} />)}
+                    </div>
+                    <p/>
+                    <div className="row btn-group">
+                        <LoadPostBtn />
+                        <PostMetricsBtn />
+                    </div>
+                    <PostMetrics />
+                </div>
+
+            const PageHeader = () => 
+                <div className="jumbotron clr-bored">
+                    <h1><strong className="text-primary">GenericBoard</strong> <small>Version 0 (components only, not live)</small></h1>
+                </div>
+
+            const UserInfo = () => <h3><small>user:</small>{me}</h3>
+
+            const Page = () => 
+                <div className="page">
+                    <PageHeader />
+                    <UserInfo />
+                    <PostList posts={initialState.posts} />
+                </div>
+
+            ReactDOM.render(
+                <Page />,
+                document.getElementById('app')
+            );
+        </script>
+    </body>
+</html>
