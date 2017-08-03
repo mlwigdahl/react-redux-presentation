@@ -30,97 +30,106 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js" integrity="sha384-iuw+SkbnEXb6A6JBdgzzWBLglxDedYujIlz1CFE5L+r5NJiBQ0SS/TXfcd6BsiCW" crossorigin="anonymous"></script>
         <script type="text/babel">
 
-            // we'd like to:
-            //  1. Like posts ("simple" business logic)
-            //  2. Run a report on the posts ("complex" business logic)
-            //  3. Fetch new posts (async business logic)
+// we'd like to:
+//  1. Like posts ("simple" business logic)
+//  2. Run a report on the posts ("complex" business logic)
+//  3. Fetch new posts (async business logic)
 
-            const initialState = {
-                posts: {
-                    1: {text: 'First message', author: 'Matt Wigdahl', likes: 0, comments: [1, 2]},
-                    2: {text: 'Check out my blog...', author: 'Edwin Alton', likes: 0, comments: [3, 4]}
-                },
-                comments: {
-                    1: { text: 'Congratulations!' },
-                    2: { text: 'Welcome aboard!' },
-                    3: { text: 'Great article' },
-                    4: { text: 'Are you sure?' }
-                }
-            };
+const initialState = {
+    posts: {
+        1: {text: 'First message', author: 'Matt Wigdahl', likes: 0, 
+            comments: [1, 2]},
+        2: {text: 'Check out my blog...', author: 'Edwin Alton', likes: 0, 
+            comments: [3, 4]}
+    },
+    comments: {
+        1: { text: 'Congratulations!' },
+        2: { text: 'Welcome aboard!' },
+        3: { text: 'Great article' },
+        4: { text: 'Are you sure?' }
+    }
+};
 
-            const me = 'Matt Wigdahl';
+const me = 'Matt Wigdahl';
 
-            const PostText = ({text}) => <h3><small>post: </small><span className="h4">{text}</span></h3>
-            const Author = ({author}) => <h3><small>author: </small>{author}</h3>
-            const Likes = ({likes}) => <h3><small>likes: {likes}</small></h3>
-            const Comment = ({comment}) => <li>{comment}</li>
+const PostText = ({text}) => 
+    <h3><small>post: </small><span className="h4">{text}</span></h3>
+const Author = ({author}) => <h3><small>author: </small>{author}</h3>
+const Likes = ({likes}) => <h3><small>likes: {likes}</small></h3>
+const Comment = ({comment}) => <li>{comment}</li>
 
-            const PostDeleteBtn = () => 
-                <button type="button" className="btn btn-danger"><span className="glyphicon glyphicon-remove" /></button>;
+const PostDeleteBtn = () => 
+    <button type="button" className="btn btn-danger">
+        <span className="glyphicon glyphicon-remove" />
+    </button>;
 
-            const CommentAddBtn = () => 
-                <button type="button" className="btn btn-primary"><span className="glyphicon glyphicon-comment"/></button>;
+const CommentAddBtn = () => 
+    <button type="button" className="btn btn-primary">
+        <span className="glyphicon glyphicon-comment"/>
+    </button>;
 
-            const LikePostBtn = () =>
-                <button type="button" className="btn btn-primary"><span className="glyphicon glyphicon-thumbs-up"/></button>;
+const LikePostBtn = () =>
+    <button type="button" className="btn btn-primary">
+        <span className="glyphicon glyphicon-thumbs-up"/>
+    </button>;
 
-            const CommentList = ({postComments, comments}) => 
-                <div>
-                    <h3><small>comments:</small></h3>
-                    <ul>{postComments.map((id) => <Comment comment={comments[id].text} key={id} />)}</ul>
-                </div>
+const CommentList = ({postComments, comments}) => 
+    <div>
+        <h3><small>comments:</small></h3>
+        <ul>{postComments.map((id) => <Comment comment={comments[id].text} key={id} />)}</ul>
+    </div>
 
-            const ActionButtons = ({author}) =>
-                author === me ? <PostDeleteBtn /> :
-                    <div>
-                        <LikePostBtn />
-                        <CommentAddBtn />
-                    </div>
+const ActionButtons = ({author}) =>
+    author === me ? <PostDeleteBtn /> :
+        <div>
+            <LikePostBtn />
+            <CommentAddBtn />
+        </div>
 
-            const Post = ({post}) =>
-                <div className="clr-bored col-xs-12 col-sm-10 col-md-offset-1">
-                    <Author author={post.author} />
-                    <Likes likes={post.likes} />
-                    <PostText text={post.text} />
-                    <CommentList author={post.author} postComments={post.comments} comments={initialState.comments} />
-                    <ActionButtons author={post.author} />
-                </div>
+const Post = ({post}) =>
+    <div className="clr-bored col-xs-12 col-sm-10 col-md-offset-1">
+        <Author author={post.author} />
+        <Likes likes={post.likes} />
+        <PostText text={post.text} />
+        <CommentList author={post.author} postComments={post.comments} comments={initialState.comments} />
+        <ActionButtons author={post.author} />
+    </div>
 
-            const LoadPostBtn = () => <input type="button" value="Load New Posts" className="btn btn-primary" />
-            const PostMetricsBtn = () => <input type="button" value="Update Post Metrics" className="btn btn-primary" />
-            const PostMetrics = ({displayString}) => displayString ? <div><span>{displayString}</span></div> : null;
+const LoadPostBtn = () => <input type="button" value="Load New Posts" className="btn btn-primary" />
+const PostMetricsBtn = () => <input type="button" value="Update Post Metrics" className="btn btn-primary" />
+const PostMetrics = ({displayString}) => displayString ? <div><span>{displayString}</span></div> : null;
 
-            const PostList = ({posts}) => 
-                <div className="container">
-                    <div className="row">
-                        {Object.entries(posts).map(([ind, post]) => <Post post={post} key={ind} />)}
-                    </div>
-                    <p/>
-                    <div className="row btn-group">
-                        <LoadPostBtn />
-                        <PostMetricsBtn />
-                    </div>
-                    <PostMetrics />
-                </div>
+const PostList = ({posts}) => 
+    <div className="container">
+        <div className="row">
+            {Object.entries(posts).map(([ind, post]) => <Post post={post} key={ind} />)}
+        </div>
+        <p/>
+        <div className="row btn-group">
+            <LoadPostBtn />
+            <PostMetricsBtn />
+        </div>
+        <PostMetrics />
+    </div>
 
-            const PageHeader = () => 
-                <div className="jumbotron clr-bored">
-                    <h1><strong className="text-primary">GenericBoard</strong> <small>Version 0 (components only, not live)</small></h1>
-                </div>
+const PageHeader = () => 
+    <div className="jumbotron clr-bored">
+        <h1><strong className="text-primary">GenericBoard</strong> <small>Version 0 (components only, not live)</small></h1>
+    </div>
 
-            const UserInfo = () => <h3><small>user:</small>{me}</h3>
+const UserInfo = () => <h3><small>user:</small>{me}</h3>
 
-            const Page = () => 
-                <div className="page">
-                    <PageHeader />
-                    <UserInfo />
-                    <PostList posts={initialState.posts} />
-                </div>
+const Page = () => 
+    <div className="page">
+        <PageHeader />
+        <UserInfo />
+        <PostList posts={initialState.posts} />
+    </div>
 
-            ReactDOM.render(
-                <Page />,
-                document.getElementById('app')
-            );
+ReactDOM.render(
+    <Page />,
+    document.getElementById('app')
+);
         </script>
     </body>
 </html>
